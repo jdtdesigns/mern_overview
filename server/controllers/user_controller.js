@@ -45,7 +45,8 @@ const user_controller = {
 
     res.cookie('token', token, {
       maxAge: 60 * 60 * 1000,
-      httpOnly: true
+      httpOnly: true,
+      secure: process.env.PORT ? true : false
     });
 
     res.json(user);
