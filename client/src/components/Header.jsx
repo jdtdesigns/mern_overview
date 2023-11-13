@@ -1,13 +1,21 @@
+import axios from 'axios'
+
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container'
 
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
-function Header({ user }) {
+function Header({ user, setUser }) {
+  const navigate = useNavigate()
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
+
+    await axios.get('/auth/logout')
+
+    setUser(null)
+    navigate('/')
   }
 
   return (
@@ -20,7 +28,7 @@ function Header({ user }) {
           <Nav className="ms-auto">
             {user ? (
               <>
-                <p>jd@test.com</p>
+                <p>{user.email}</p>
                 <a href="/logout" onClick={logout}>Log Out</a>
               </>
             ) : (

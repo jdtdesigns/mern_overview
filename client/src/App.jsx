@@ -1,5 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import axios from 'axios'
 
 import Container from 'react-bootstrap/Container'
 
@@ -10,21 +12,36 @@ import Auth from './pages/Auth'
 import NotFound from './pages/NotFound'
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    axios.get('/auth/authenticate')
+      .then(res => {
+        setUser(res.data.user)
+        setLoading(false)
+      })
+  }, [])
 
   return (
     <>
-      <Header user={user} />
+      {loading ? (
+        <h3 className="d-flex justify-content-center align-items-center vh-100">Loading...</h3>
+      ) : (
+        <>
+          <Header user={user} setUser={setUser} />
 
-      <Container>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/register" element={<Auth isLogin={false} />} />
-          <Route path="/login" element={<Auth isLogin={true} />} />
+          <Container>
+            <Routes>
+              <Route path="/" element={<Landing user={user} />} />
+              <Route path="/register" element={<Auth isLogin={false} setUser={setUser} />} />
+              <Route path="/login" element={<Auth isLogin={true} setUser={setUser} />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Container>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Container>
+        </>
+      )}
     </>
   )
 }
