@@ -58,6 +58,14 @@ const user_controller = {
       user: req.user,
       authenticated: true
     })
+  },
+
+  logout(req, res) {
+    res.clearCookie('token');
+
+    res.json({
+      message: 'Logged out successfully!'
+    });
   }
 };
 
