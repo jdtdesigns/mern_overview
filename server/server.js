@@ -26,6 +26,13 @@ app.use(cookieParser());
 // Load Routes
 app.use('/auth', user_routes);
 
+// Trigger React router to handle all routing outside of our auth routes
+if (is_prod) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
+
 // Validate that the mongoose connection is complete
 db.once('open', () => {
   console.log('DB connection established');
