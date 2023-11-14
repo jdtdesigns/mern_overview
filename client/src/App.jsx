@@ -11,14 +11,21 @@ import Landing from './pages/Landing'
 import Auth from './pages/Auth'
 import NotFound from './pages/NotFound'
 
+import { useStore } from './store'
+
 function App() {
-  const [user, setUser] = useState(null)
+  const { setState } = useStore()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     axios.get('/auth/authenticate')
       .then(res => {
-        setUser(res.data.user)
+        setState((oldState) => {
+          return {
+            ...oldState,
+            user: res.data.user
+          }
+        })
         setLoading(false)
       })
   }, [])
@@ -29,13 +36,13 @@ function App() {
         <h3 className="d-flex justify-content-center align-items-center vh-100">Loading...</h3>
       ) : (
         <>
-          <Header user={user} setUser={setUser} />
+          <Header />
 
           <Container>
             <Routes>
-              <Route path="/" element={<Landing user={user} />} />
-              <Route path="/register" element={<Auth isLogin={false} setUser={setUser} />} />
-              <Route path="/login" element={<Auth isLogin={true} setUser={setUser} />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/register" element={<Auth isLogin={false} />} />
+              <Route path="/login" element={<Auth isLogin={true} />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>

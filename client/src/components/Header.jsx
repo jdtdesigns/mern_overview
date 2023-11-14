@@ -1,12 +1,15 @@
 import axios from 'axios'
 
 import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav';
+import Nav from 'react-bootstrap/Nav'
 import Container from 'react-bootstrap/Container'
 
 import { NavLink, useNavigate } from 'react-router-dom'
 
-function Header({ user, setUser }) {
+import { useStore } from '../store'
+
+function Header() {
+  const { user, setState } = useStore()
   const navigate = useNavigate()
 
   const logout = async (e) => {
@@ -14,7 +17,10 @@ function Header({ user, setUser }) {
 
     await axios.get('/auth/logout')
 
-    setUser(null)
+    setState(oldState => ({
+      ...oldState,
+      user: null
+    }))
     navigate('/')
   }
 

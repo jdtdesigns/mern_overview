@@ -6,12 +6,15 @@ import Form from 'react-bootstrap/Form'
 
 import { NavLink, useNavigate } from 'react-router-dom'
 
+import { useStore } from '../store'
+
 const initialFormData = {
   email: '',
   password: ''
 }
 
-function Auth({ isLogin, setUser }) {
+function Auth({ isLogin }) {
+  const { setState } = useStore()
   const [formData, setFormData] = useState(initialFormData)
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
@@ -33,7 +36,10 @@ function Auth({ isLogin, setUser }) {
 
       setFormData({ ...initialFormData })
 
-      setUser(res.data)
+      setState(oldState => ({
+        ...oldState,
+        user: res.data
+      }))
       setErrorMessage('')
       navigate('/')
     } catch (error) {
