@@ -18,6 +18,10 @@ const REGISTER_USER = gql`
     register(email: $email, password: $password) {
       _id
       email 
+      hobbies {
+        _id
+        name
+      }
     }
   }
 `
@@ -27,6 +31,10 @@ const LOGIN_USER = gql`
     login(email: $email, password: $password) {
       _id
       email 
+      hobbies {
+        _id
+        name
+      }
     }
   }
 `
@@ -54,6 +62,8 @@ function Auth({ isLogin }) {
       const resolverName = isLogin ? 'login' : 'register'
 
       const { data: userData } = await authenticateUser()
+
+      console.log(userData)
 
       setFormData({ ...initialFormData })
 

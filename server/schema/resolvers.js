@@ -40,7 +40,7 @@ const resolvers = {
     async login(_, args, context) {
       const { email, password } = args;
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).populate('hobbies');
 
       if (!user) throw new Error('User with that email address not found.');
 
@@ -57,6 +57,12 @@ const resolvers = {
       });
 
       return user;
+    },
+
+    logout(_, __, context) {
+      context.res.clearCookie('token')
+
+      return 'User logged out successfully!'
     }
   }
 }

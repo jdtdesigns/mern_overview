@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { useMutation, gql } from '@apollo/client'
 
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
@@ -8,14 +8,22 @@ import { NavLink, useNavigate } from 'react-router-dom'
 
 import { useStore } from '../store'
 
+const LOGOUT_USER = gql`
+  mutation {
+    logout
+  }
+`
+
 function Header() {
   const { user, setState } = useStore()
   const navigate = useNavigate()
 
+  const [logoutUser] = useMutation(LOGOUT_USER)
+
   const logout = async (e) => {
     e.preventDefault();
 
-    await axios.get('/auth/logout')
+    await logoutUser()
 
     setState(oldState => ({
       ...oldState,
