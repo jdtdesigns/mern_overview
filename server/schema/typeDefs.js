@@ -2,6 +2,7 @@ const gql = String.raw;
 
 const typeDefs = gql`
   type Hobby {
+    _id: ID
     name: String
   }
 
@@ -14,8 +15,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getAllUsers: [User]
-    getOneUser(id: String): User
+    authenticate: User
   }
 
   type Mutation {

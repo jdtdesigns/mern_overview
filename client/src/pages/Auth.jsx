@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import { useMutation, gql } from '@apollo/client'
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -13,11 +13,32 @@ const initialFormData = {
   password: ''
 }
 
+const REGISTER_USER = gql`
+  mutation RegisterUser($email: String!, $password: String!) {
+    register(email: $email, password: $password) {
+      _id
+      email 
+    }
+  }
+`
+
+const LOGIN_USER = gql`
+  mutation LoginUser($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      _id
+      email 
+    }
+  }
+`
+
 function Auth({ isLogin }) {
   const { setState } = useStore()
   const [formData, setFormData] = useState(initialFormData)
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
+  const [authenticateUser] = useMutation(isLogin ? LOGIN_USER : REGISTER_USER, {
+    variables: formData
+  })
 
   const handleInputChange = (e) => {
     setFormData({
@@ -30,20 +51,21 @@ function Auth({ isLogin }) {
     e.preventDefault()
 
     try {
-      const route = isLogin ? 'login' : 'register'
+      const resolverName = isLogin ? 'login' : 'register'
 
-      const res = await axios.post(`/auth/${route}`, formData)
+      const { data: userData } = await authenticateUser()
 
       setFormData({ ...initialFormData })
 
       setState(oldState => ({
         ...oldState,
-        user: res.data
+        user: userData[resolverName]
       }))
       setErrorMessage('')
+
       navigate('/')
     } catch (error) {
-      setErrorMessage(error.response.data.message)
+      setErrorMessage(error.message)
     }
   }
 

@@ -55,10 +55,10 @@ const User = model('User', userSchema);
 
 
 // User.findOneAndUpdate({
-//   _id: '65523f7c4f62b4b56e92652c'
+//   _id: '6556381d1ab3fd1f20c8aef0'
 // }, {
 //   $push: {
-//     hobbies: '655500cb43f7365d389cd7ae'
+//     hobbies: '65563f8b343ca27120d6f427'
 //   }
 // }).then(() => console.log('updated'))
 

@@ -1,5 +1,5 @@
 const { sign, verify } = require('jsonwebtoken');
-const User = require('../../models/User');
+const User = require('../models/User');
 
 async function createToken(user_id) {
   try {
@@ -11,26 +11,22 @@ async function createToken(user_id) {
   }
 }
 
-async function isAuthenticated(req, res, next) {
+async function authenticate({ req, res }) {
   const token = req.cookies.token;
 
-  if (!token) return res.status(401).send({
-    message: 'Not Authorized'
-  });
+  if (!token) return { res: res }
 
   try {
     const data = await verify(token, process.env.JWT_SECRET, {
       maxAge: '1hr'
     });
 
-    req.user = await User.findById(data.user_id);
+    const user = await User.findById(data.user_id).populate('hobbies');
 
-    next();
+    return { user: user, res: res }
   } catch (error) {
-    res.status(401).send({
-      message: 'Your token is invalid.'
-    })
+    return { res: res }
   }
 }
 
-module.exports = { createToken, isAuthenticated }
+module.exports = { createToken, authenticate }

@@ -1,19 +1,12 @@
 const User = require('../models/User');
 const Hobby = require('../models/Hobby');
 
-const { createToken } = require('./helpers');
+const { createToken } = require('../auth');
 
 const resolvers = {
   Query: {
-    async getAllUsers() {
-      const users = await User.find().populate('hobbies');
-
-      return users;
-    },
-    async getOneUser(_, args) {
-      const user = await User.findById(args.id).populate('hobbies');
-
-      return user;
+    authenticate(_, __, context) {
+      return context.user
     }
   },
 
