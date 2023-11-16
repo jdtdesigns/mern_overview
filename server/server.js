@@ -34,7 +34,14 @@ async function startServer() {
   // Open cookie middleware channel so we can view cookies on the request object
   app.use(cookieParser());
 
-  app.use('/graphql', expressMiddleware(server));
+  app.use('/graphql', expressMiddleware(server, {
+    context(serverData) {
+      return {
+        req: serverData.req,
+        res: serverData.res
+      }
+    }
+  }));
 
   // Trigger React router to handle all routing outside of our auth routes
   if (is_prod) {
