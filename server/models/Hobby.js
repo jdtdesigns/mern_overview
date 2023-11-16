@@ -6,8 +6,4 @@ const hobbySchema = new Schema({
 
 const Hobby = model('Hobby', hobbySchema);
 
-// Hobby.create({
-//   name: 'Pickleball'
-// }).then(() => console.log('hobby created'))
-
 module.exports = Hobby;
