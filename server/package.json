@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "npx nodemon server.js"
+    "start:dev": "npx nodemon server.js",
+    "seed:prod": "cd ./config && NODE_ENV=production node seed.js",
+    "seed:dev": "cd ./config && node seed.js"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +21,8 @@
     "graphql": "^16.8.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1"
   }
 }
